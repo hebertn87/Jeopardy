@@ -3,39 +3,94 @@ package jeopardyClient;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import gameObject.*;
 
 //Client class handles connection to server
 public class JeopardyClient {
-	public static void main(String args[]) throws IOException {
+	
+	Socket socket = null;
+	ObjectInputStream objIn = null;
+	ObjectOutputStream objOut = null;
+	DataInputStream dataIn = null;
+	DataOutputStream dataOut = null;
+	int numPlayer, startGameID = 0;
+	boolean gameRunning = false;
+	
+	
+	
+	//Constructor
+	public JeopardyClient() {
+			try {
+				PlayGame();
+			}catch(ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		
-		int clientNum = 1;
-		//Establish connection through port 1286
-		Socket s = new Socket("localhost",1286);
+	}
+	
+	public void PlayGame() throws ClassNotFoundException {
 		
-		//Access the input stream with data input stream
-		InputStream sIn = s.getInputStream();
-		OutputStream sOn = s.getOutputStream();
+		//Established connection and created Object and dataStreams
+		try {
+			//Establish connection through port 1286
+			socket = new Socket("localhost",1286);
+			objIn = new ObjectInputStream(socket.getInputStream());
+			objOut = new ObjectOutputStream(socket.getOutputStream());
+			dataIn = new DataInputStream(socket.getInputStream());
+			dataOut = new DataOutputStream(socket.getOutputStream());
+			
+		}catch(IOException e) {
+			e.printStackTrace(); //Prints IOException
+		}
 		
-		//Access the input stream with data input stream
-		DataInputStream socketDIS = new DataInputStream(sIn);
-		DataOutputStream socketDOS = new DataOutputStream(sOn);
+		//Initialize Player		
+		try {
+			numPlayer = dataIn.readInt();
+			System.out.println("You are connected! You are player #" + numPlayer + ".");
+			System.out.println(dataIn.readUTF());
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
 		
-		//Read from socket data input stream
-		//String testString = new String (socketDIS.readUTF());
+		//Initialize threads here
+		String tempString = null;
+		//Do game loop
+		while(!gameRunning) {
+			try {
+				tempString = dataIn.readUTF();
+				System.out.println(tempString);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+			}
+			
+			if(tempString.equals("Game started")) {
+				gameRunning = true;
+				break;
+			}
+		}	
 		
-		//Print data read
-		socketDOS.writeInt(clientNum);
-		
-		socketDOS.writeUTF("I receieved your message, I'm ready to play!");
-		
-		//clean up
-		socketDIS.close();
-		socketDOS.close();
-		sIn.close();
-		sOn.close();
-		s.close();
-	}	
+		System.out.println("The game has now started. Get ready!");
+		//respond to question
+		try {
+			dataIn.readInt();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		try {
+			tempString = dataIn.readUTF();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			System.out.println(tempString);
+		//gets whether or not we were right
+	
+	}
 }
