@@ -1,16 +1,14 @@
-//Nathan Hebert 3/7/2018
-//This is the client class, that contains how the client connects to the server and handles the questions
-package jeopardy;
+package jeopardyClient;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
-import java.io.DataOutputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 
 //Client class handles connection to server
-public class Client {
+public class JeopardyClient {
 	public static void main(String args[]) throws IOException {
 		
 		int clientNum = 1;
@@ -41,5 +39,3 @@ public class Client {
 		s.close();
 	}	
 }
-
-

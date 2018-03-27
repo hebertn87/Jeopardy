@@ -1,20 +1,16 @@
-//Nathan Hebert 3/7/2018
-//This is the server that allows the clients to connect to the game
-package jeopardy;
+package jeopardyServer;
 
-import java.io.DataOutputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.InputStream;
-import java.io.DataInputStream;
 
-public class Server implements Runnable {
+public class JeopardyServer implements Runnable{
 	
 	Socket s;
 	
-	public Server(Socket _s) {
+	public JeopardyServer(Socket _s) {
 		this.s = _s;
 	}
 	
@@ -30,7 +26,7 @@ public class Server implements Runnable {
 			Integer clientNum = new Integer (serverInStream.readInt());
 			Integer leftToConn = 3 - clientNum;
 			System.out.println("Client " + clientNum + " has connected. Waiting on " +  leftToConn + " Players.");
-			new Thread(new Server(sock)).start();
+			new Thread(new JeopardyServer(sock)).start();
 		}
 	}
 
@@ -39,5 +35,4 @@ public class Server implements Runnable {
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
