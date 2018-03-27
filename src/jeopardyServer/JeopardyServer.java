@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import gameObject.JeopardyQuestion;
+import gameObject.JeopardyAnswer;
 
 public class JeopardyServer {
 	
@@ -32,7 +33,7 @@ public class JeopardyServer {
 		serverSocket = new ServerSocket(1286);
 		
 		JeopardyQuestion question  = new JeopardyQuestion(1, "What is 2 + 2", 200);
-		
+		JeopardyAnswer answer = new JeopardyAnswer(1, "4", 200);
 		
 		
 

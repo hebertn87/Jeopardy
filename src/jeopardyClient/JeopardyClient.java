@@ -55,6 +55,8 @@ public class JeopardyClient {
 			e.printStackTrace();
 		}
 		
+		
+		
 		//Initialize threads here
 		String tempString = null;
 		//Do game loop
